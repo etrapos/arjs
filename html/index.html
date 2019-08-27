@@ -30,7 +30,7 @@
 <body style='margin:0px; overflow:hidden;'>
 <!-- こっからA-Frame -->
 <!--<a-scene embedded arjs="debugUIEnabled:false;trackingMethod:best;sourceType: webcam;" vr-mode-ui="enabled: false" physics="debug: true;">-->
-<a-scene embedded arjs="debugUIEnabled:false;sourceType:webcam;" vr-mode-ui="enabled: false" physics="debug: false;gravity: -4.9;" class="" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="">
+<a-scene embedded arjs="debugUIEnabled:false;sourceType:webcam;" vr-mode-ui="enabled: false" physics="debug: true;gravity: -4.9;" class="" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="">
 
     <!-- オブジェクトファイルとマテリアルファイルを読み込む -->
     <a-assets>
@@ -50,7 +50,11 @@
 
         
         <a-entity 
-           dynamic-body="shape: cylinder; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           shape__main="shape: cylinder;
+             height: 2;
+             radiusTop: 0.5;
+             radiusBottom: 0.4;"
            id="player1" geometry="height: 2;" position="0 0.4 0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 180 0">
           <a-entity 
             obj-model="obj: #sample1-obj; mtl: #sample1-mtl"
@@ -59,7 +63,11 @@
         </a-entity>
 
         <a-entity 
-           dynamic-body="shape: cylinder; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           shape__main="shape: cylinder;
+             height: 2;
+             radiusTop: 0.5;
+             radiusBottom: 0.4;"
            id="player2" geometry="height: 2;" position="0 0.4 -0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 0 0">
           <a-entity 
             obj-model="obj: #sample2-obj; mtl: #sample2-mtl"
@@ -94,8 +102,8 @@
 </a-scene>
 <!-- ここまででA-Frameおわり -->
 <button id="dev" type="button" style="position: absolute; right: 200px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">dev</button>
-<button id="tap" type="button" style="position: absolute; right: 100px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">tap</button>
-<button id="reset" type="button" style="position: absolute; right: 15px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">reset</button>
+<button id="tap" type="button" style="position: absolute; right: 130px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">tap</button>
+<button id="reset" type="button" style="position: absolute; right: 50px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">reset</button>
 
 <script>
   const THREE = window.THREE;
@@ -153,15 +161,17 @@
   }
   
   document.getElementById("reset").onclick = function() {
-    reset()
+    if (player == 1) {
+      reset()
+    }
   }
 
   function move(target, v, rad) {
-    var vec = Math.min(0.7, v);
+    var vec = Math.min(0.75, v);
     var x = vec * Math.sin(rad);
     var z = vec * Math.cos(rad);
 
-    var rate = 0.8;
+    var rate = 2 / 3;
     if (target == 1) {
       obj1.body.velocity.x -= x;
       obj1.body.velocity.z -= z;
@@ -175,47 +185,7 @@
     }
     
     // sendData
-    data = sendData();
-  }
-  
-  function tap(target, v, rad) {
-    // x < 0, left
-    // x > 0, right
-    // z < 0, forward
-    // z > 0, back
-    if (player == 1) {
-      move(target, v, rad);
-    } else {
-      // send
-    }
-  }
-
-  document.getElementById("tap").onclick = function() {
-    tap(1, 0.5 + Math.random() * 0.1, getCameraRad());
-    // alert(getCameraRad());
-
-    // var marker = camera.object3D.children[0];
-    // var r = marker.rotation;
-    // obj.setAttribute("rotation", {y:THREE.Math.radToDeg((r.x > Math.PI / -2 ? r.y + Math.PI: r.y * -1))});
-
-    // var velocity = new THREE.Vector3();
-    // var speed = 3;
-    // var x = 45;
-    // var y = 45;
-    // velocity.x = Math.sin(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
-    // velocity.y = Math.sin(x * Math.PI / 180) * speed;
-    // velocity.z = Math.cos(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
-    
-    // obj.setAttribute("velocity", velocity);
-    
-    // var pos = new CANNON.Vec3().copy(obj.getAttribute('position'));
-    // pos.x += -1;
-    // pos.z += 0.25;
-
-  //   obj.body.applyImpulse(
-  // /* impulse */        new CANNON.Vec3(0.0, 0.5, -0.25), pos
-  // /* world position */
-  //   );
+    syncData = sendData();
   }
 
 //   onRenderFcts.push(function (deltaSec, nowSec) {
@@ -279,6 +249,7 @@
 		});
 	});
 	
+	// mic
   navigator.mediaDevices.getUserMedia({ audio: true, video: false })
   .then(function(stream){
     
@@ -293,20 +264,20 @@
       setInterval(() => {
         const v = soundMeter.instant;
         prev = prev || v;
-        // document.getElementById("dev").innerHTML = v;
         if (v > prev) {
-          const vec = Math.sqrt(v - prev) * 6;
+          const vec = Math.sqrt(v - prev) * 3;
           if (vec > 0.3) {
             tap(1, vec, getCameraRad());
           }
         }
         prev = v;
-      }, 150);
+      }, 50);
     });
   });
 
-  // sendData
-  var data = null;
+  // syncData
+  var tapData = null;
+  var syncData = null;
   function sendData() {
     function getData() {
       const data = [];
@@ -328,36 +299,52 @@
   
       return data;
     }
-    data = getData();
+    syncData = getData();
   }
   if (player == 1) {
     setInterval(sendData, 100);
   }
-
-  // recvData
-  if (player != 1) {
-    onRenderFcts.push(function() {
-      var dat = data;
-      if (dat == null || data.length != 2) {
-        return;
-      }
-      data = null;
-
-      objs.forEach(function(o) {
-        const body = o.el.body;
-        if (body == null) {
-          return;
-        }
-        const d = dat.shift();
-        body.sleep();
-        body.position = new CANNON.Vec3(d.p[0], d.p[1], d.p[2]);
-        body.quaternion.set(d.q[0], d.q[1], d.q[2], d.q[3]);
-        body.velocity = new CANNON.Vec3(d.v[0], d.v[1], d.v[2]);
-        body.wakeUp();
-      });
-    });
+  
+  function tap(target, v, rad) {
+    // x < 0, left
+    // x > 0, right
+    // z < 0, forward
+    // z > 0, back
+    if (player == 1) {
+      move(target, v, rad);
+    } else if (player == 2) {
+      tapData = {v: v, r: rad};
+    }
   }
 
+  document.getElementById("tap").onclick = function() {
+    tap(1, 0.5 + Math.random() * 0.2, getCameraRad());
+    // alert(getCameraRad());
+
+    // var marker = camera.object3D.children[0];
+    // var r = marker.rotation;
+    // obj.setAttribute("rotation", {y:THREE.Math.radToDeg((r.x > Math.PI / -2 ? r.y + Math.PI: r.y * -1))});
+
+    // var velocity = new THREE.Vector3();
+    // var speed = 3;
+    // var x = 45;
+    // var y = 45;
+    // velocity.x = Math.sin(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
+    // velocity.y = Math.sin(x * Math.PI / 180) * speed;
+    // velocity.z = Math.cos(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
+    
+    // obj.setAttribute("velocity", velocity);
+    
+    // var pos = new CANNON.Vec3().copy(obj.getAttribute('position'));
+    // pos.x += -1;
+    // pos.z += 0.25;
+  
+    //   obj.body.applyImpulse(
+    // /* impulse */        new CANNON.Vec3(0.0, 0.5, -0.25), pos
+    // /* world position */
+    //   );
+  }
+    
   const peer = (window.peer = new Peer({
     key: "d097f0a2-c112-428a-9d69-a86edf2b03cf",
     debug: 3,
@@ -371,23 +358,76 @@
     });
     
     dataConnection.on('data', d => {
-      data = d.data;
+      const data = d.data;
+      if (data.type == "sync") {
+        syncData = data.body;
+      } else if (data.type == "tap") {
+        tapData = data.body;
+      }
     });
     
     if (player == 1) {
+      // player 1
       onRenderFcts.push(function() {
-        const dat = data;
-        if (dat != null) {
-          data = null;
-          dataConnection.send(dat);
+        const data = syncData;
+        if (data != null) {
+          syncData = null;
+          dataConnection.send({
+              type: "sync"
+            , body: data
+          });
         }
+      });
+      onRenderFcts.push(function() {
+        const data = tapData;
+        if (data != null) {
+          tapData = null;
+          move(2, data.v, data.r);
+        }
+      });
+    } else {
+      // other
+      if (player == 2) {
+        onRenderFcts.push(function() {
+          const data = tapData;
+          if (data != null) {
+            tapData = null;
+            dataConnection.send({
+                type: "tap"
+              , body: data
+            });
+          }
+        });
+      }
+      onRenderFcts.push(function() {
+        var data = syncData;
+        if (data == null || syncData.length != 2) {
+          return;
+        }
+        syncData = null;
+  
+        objs.forEach(function(o) {
+          const body = o.el.body;
+          if (body == null) {
+            return;
+          }
+          const d = data.shift();
+          body.sleep();
+          body.position = new CANNON.Vec3(d.p[0], d.p[1], d.p[2]);
+          body.quaternion.set(d.q[0], d.q[1], d.q[2], d.q[3]);
+          body.velocity = new CANNON.Vec3(d.v[0], d.v[1], d.v[2]);
+          body.wakeUp();
+        });
       });
     }
 
     peer.on('error', console.error);
   });
   
-  
+  document.addEventListener('touchend', event => {
+    event.preventDefault();
+    event.target.click();
+  }, false);
 </script>
 
 </body>
