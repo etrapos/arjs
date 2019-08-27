@@ -1,31 +1,394 @@
 <!doctype HTML>
 <html>
-<head>
-  <meta charset="utf-8"/>
-  <!-- A-Frame ライブラリの読み込み -->
-  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
-  <!-- AR.js ライブラリの読み込み -->
-  <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
-</head>
+  <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<!-- A-Frame ライブラリの読み込み -->
+<script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+<!-- AR.js ライブラリの読み込み -->
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.min.js"></script>
+
+<!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v5.1.0/dist/aframe-extras.min.js"></script>-->
+<script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+<script src="https://webrtc.github.io/samples/src/content/getusermedia/volume/js/soundmeter.js"></script>
+
+<script type="text/javascript" src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+
+    <!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>-->
+    
+    <!--<script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/kripken/ammo.js/dcab07bf0e7f2b4b64c01dc45da846344c8f50be/builds/ammo.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/takahirox/aframe-outline/v1.1.1/build/aframe-outline.min.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/takahirox/a-mmd/v1.0.3/build/a-mmd.min.js"></script>-->
+    <style type="text/css">
+      html {
+        touch-action: manipulation;
+      }
+    </style>
+  </head>
 <body style='margin:0px; overflow:hidden;'>
-  てすと
 <!-- こっからA-Frame -->
-<a-scene embedded arjs="debugUIEnabled:false;trackingMethod:best;" vr-mode-ui="enabled: false">
+<!--<a-scene embedded arjs="debugUIEnabled:false;trackingMethod:best;sourceType: webcam;" vr-mode-ui="enabled: false" physics="debug: true;">-->
+<a-scene embedded arjs="debugUIEnabled:false;sourceType:webcam;" vr-mode-ui="enabled: false" physics="debug: false;gravity: -4.9;" class="" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="">
+
     <!-- オブジェクトファイルとマテリアルファイルを読み込む -->
     <a-assets>
-        <a-asset-item id="sample-obj" src="model_obj/sample/sample.obj"></a-asset-item>
-        <a-asset-item id="sample-mtl" src="model_obj/sample/sample.mtl"></a-asset-item>
+        <a-asset-item id="sample1-obj" src="model_obj/sample1/sample.obj"></a-asset-item>
+        <a-asset-item id="sample1-mtl" src="model_obj/sample1/sample.mtl"></a-asset-item>
+        <a-asset-item id="sample2-obj" src="model_obj/sample2/sample.obj"></a-asset-item>
+        <a-asset-item id="sample2-mtl" src="model_obj/sample2/sample.mtl"></a-asset-item>
     </a-assets>
-　　　　　　　　<!-- こっからARの世界。マーカー上になにを展開するかを書く -->
-    <a-marker preset="hiro">
-    <!--<a-marker type="pattern" url="./marker/pattern-qr.patt">-->
-        <a-obj-model id="sample" src="#sample-obj" mtl="#sample-mtl" position="0.5 0 0" scale="0.25 0.25 0.25" rotation="0 0 0"></a-obj-model>
-        <a-obj-model id="sample" src="#sample-obj" mtl="#sample-mtl" position="-0.5 0 0" scale="0.25 0.25 0.25" rotation="0 0 0"></a-obj-model>
-        <a-text value="Merry X'mas !！！" position="0 1.3 0" align="center"></a-text>
-    </a-marker>
-    <!-- arなのでこんな感じでカメラが必要らしい。 -->
-    <a-entity camera></a-entity>
+　　　　<!-- こっからARの世界。マーカー上になにを展開するかを書く -->
+　　　　<a-marker-camera preset="hiro"></a-marker-camera>
+        <!--<a-obj-model id="sample" src="#sample-obj" mtl="#sample-mtl" position="0 0 0" scale="0.5 0.5 0.5" rotation="0 0 0"></a-obj-model>-->
+        <!--<a-text value="Merry X'mas !！！" position="0 1.3 0" align="center"></a-text>-->
+        
+         <!--dynamic-body="shape: box; mass: 10"-->
+        <!--<a-obj-model dynamic-body="mass:5;" id="player1" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.6 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
+        <!--<a-obj-model dynamic-body="shape: box; mass:5;linearDamping: 0.01;angularDamping: 0.0001;" id="player1" src="#sample1-obj" mtl="#sample1-mtl" geometry="primitive: box" position="0 0.6 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
+
+        
+        <a-entity 
+           dynamic-body="shape: cylinder; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           id="player1" geometry="height: 2;" position="0 0.4 0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 180 0">
+          <a-entity 
+            obj-model="obj: #sample1-obj; mtl: #sample1-mtl"
+            position="0 -1 0"
+            ></a-entity>
+        </a-entity>
+
+        <a-entity 
+           dynamic-body="shape: cylinder; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+           id="player2" geometry="height: 2;" position="0 0.4 -0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 0 0">
+          <a-entity 
+            obj-model="obj: #sample2-obj; mtl: #sample2-mtl"
+            position="0 -1 0"
+            ></a-entity>
+        </a-entity>
+        
+        <!--<a-entity id="player1" color="#333" dynamic-body="mass:100;linearDamping: 0.01;angularDamping: 0.0001;" geometry="primitive: box" position="0 1 0" material="opacity:1;" scale="0.1 0.1 0.1"></a-entity>-->
+
+        <!--<a-obj-model id="player1" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.2 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
+        
+        <!--<a-obj-model id="player2" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.15 -0.25" scale="0.2 0.125 0.2" rotation="0 0 0"></a-obj-model>-->
+        <!--<a-text value="Merry X'mas !！！" position="0 0.5 0" scale="0.3 0.3 0.3" align="center"></a-text>-->
+        <!--<a-cylinder position="0 0.15 0" radius="0.5" height="0.0001" color="#A96E2D"></a-cylinder>-->
+        <!--<a-circle-->
+        <!--  static-body-->
+        <!--  rotation="-90 0 0"-->
+        <!--  position="0 0.15 0"-->
+        <!--  radius="1"-->
+        <!-- </a-circle>-->
+        
+          <a-cylinder
+          static-body
+          color="#A96E2D"
+    radius="1" height="0.05"
+    position="0 0.1 0"
+    rotation="0 0 0"
+  ></a-cylinder>
+        
+        <a-plane static-body rotation="-90 0 0" position="0 0 0" color="#164816" height="6" width="6"></a-plane>
+<!--<a-box  position="0 0.5 -5" width="3" height="1" depth="1"></a-box>-->
 </a-scene>
 <!-- ここまででA-Frameおわり -->
+<button id="dev" type="button" style="position: absolute; right: 200px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">dev</button>
+<button id="tap" type="button" style="position: absolute; right: 100px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">tap</button>
+<button id="reset" type="button" style="position: absolute; right: 15px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">reset</button>
+
+<script>
+  const THREE = window.THREE;
+  const CANNON = window.CANNON;
+  const sceneEl = document.querySelector('a-scene');
+  const camera = sceneEl.querySelector('a-marker-camera');
+
+  const obj1 = document.getElementById("player1")
+  obj1.setAttribute("defaultPosition", [0, 0.4, 0.25]);
+  const obj2 = document.getElementById("player2")
+  obj2.setAttribute("defaultPosition", [0, 0.4, -0.25]);
+  
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
+  
+  const player = getParameterByName("p");
+
+  const objs = [
+    {
+      el: obj1
+      , initPos: new CANNON.Vec3(0, 0.4, 0.25)
+      , initAngle: new CANNON.Vec3(0, 1, 0)
+    }
+    , {
+      el: obj2
+      , initPos: new CANNON.Vec3(0, 0.4, -0.25)
+      , initAngle: new CANNON.Vec3(0, 0, 0)
+    }
+  ];
+  
+  function reset() {
+    objs.forEach(function (o) {
+      const body = o.el.body;
+      body.sleep();
+      body.velocity = new CANNON.Vec3(0, 0, 0);
+      body.position = o.initPos.clone();
+      body.quaternion.setFromAxisAngle(o.initAngle.clone(), Math.PI);
+      body.wakeUp();
+      
+      // sendData
+      sendData();
+    });
+  }
+  
+  function getCameraRad() {
+    var marker = camera.object3D.children[0];
+    return marker.rotation.z;
+  }
+  
+  document.getElementById("reset").onclick = function() {
+    reset()
+  }
+
+  function move(target, v, rad) {
+    var vec = Math.min(0.7, v);
+    var x = vec * Math.sin(rad);
+    var z = vec * Math.cos(rad);
+
+    var rate = 0.8;
+    if (target == 1) {
+      obj1.body.velocity.x -= x;
+      obj1.body.velocity.z -= z;
+      obj2.body.velocity.x -= x * rate;
+      obj2.body.velocity.z -= z * rate;
+    } else if (target == 2) {
+      obj2.body.velocity.x -= x;
+      obj2.body.velocity.z -= z;
+      obj1.body.velocity.x -= x * rate;
+      obj1.body.velocity.z -= z * rate;
+    }
+    
+    // sendData
+    data = sendData();
+  }
+  
+  function tap(target, v, rad) {
+    // x < 0, left
+    // x > 0, right
+    // z < 0, forward
+    // z > 0, back
+    if (player == 1) {
+      move(target, v, rad);
+    } else {
+      // send
+    }
+  }
+
+  document.getElementById("tap").onclick = function() {
+    tap(1, 0.5 + Math.random() * 0.1, getCameraRad());
+    // alert(getCameraRad());
+
+    // var marker = camera.object3D.children[0];
+    // var r = marker.rotation;
+    // obj.setAttribute("rotation", {y:THREE.Math.radToDeg((r.x > Math.PI / -2 ? r.y + Math.PI: r.y * -1))});
+
+    // var velocity = new THREE.Vector3();
+    // var speed = 3;
+    // var x = 45;
+    // var y = 45;
+    // velocity.x = Math.sin(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
+    // velocity.y = Math.sin(x * Math.PI / 180) * speed;
+    // velocity.z = Math.cos(y * Math.PI / 180) * Math.cos(x * Math.PI / 180) * -speed;
+    
+    // obj.setAttribute("velocity", velocity);
+    
+    // var pos = new CANNON.Vec3().copy(obj.getAttribute('position'));
+    // pos.x += -1;
+    // pos.z += 0.25;
+
+  //   obj.body.applyImpulse(
+  // /* impulse */        new CANNON.Vec3(0.0, 0.5, -0.25), pos
+  // /* world position */
+  //   );
+  }
+
+//   onRenderFcts.push(function (deltaSec, nowSec) {
+//     // tap.innerHTML = deltaSec;
+//     var y = obj.components.rotation.attrValue.y;
+//     obj.setAttribute("rotation", {y:y+1});
+// // obj.components.rotation.attrValue.y += 1
+//     // obj.rotate.x += 1
+//   })
+  function getAbsDeg(deg) {
+    if (deg < 0) {
+      deg += 360 * (parseInt(deg / 360) + 1);
+    }
+    return deg % 360;
+  }
+  
+  function degDistance(deg1, deg2) {
+    var d1 = getAbsDeg(deg1);
+    var d2 = getAbsDeg(deg2);
+    var d = d1 - d2;
+    if (d < -180) {
+      d += 360;
+    } else if (d > 180) {
+      d -= 360;
+    }
+    return d;
+  }
+  
+  // document.getElementById("tap").onclick = function() {
+  //   onRenderFcts.push((function () {
+  //     var startMsec = null;
+  //     // var r = marker.object3D.rotation
+  //     // var toDeg = THREE.Math.radToDeg((r.x > 0 ? r.y * -1 + Math.PI: r.y));
+  //     // var distance = degDistance(toDeg, obj.getAttribute("rotation").y)
+
+  //     return function (deltaSec, nowSec) {
+  //       startMsec = startMsec || nowSec;
+
+  //       // end
+  //       if (nowSec > startMsec + 1) {
+  //         var target = arguments.callee;
+  //         onRenderFcts.some(function(f, i) {
+  //           if (f == target) onRenderFcts.splice(i, 1); 
+  //         });
+  //       }
+        
+  //       var y = obj.components.rotation.attrValue.y;
+  //       obj.setAttribute("rotation", {y:y+0.1});
+  //     }
+  //   })());
+  // }
+
+  // run the rendering loop
+  const onRenderFcts = [];
+	requestAnimationFrame(function animate(nowMsec) {
+		// keep looping
+		requestAnimationFrame(animate);
+		
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(nowMsec)
+		});
+	});
+	
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+  .then(function(stream){
+    
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const soundMeter = window.soundMeter = new SoundMeter(audioContext);
+    soundMeter.connectToSource(stream, function(e) {
+      if (e) {
+        alert(e);
+        return;
+      }
+      var prev = null;
+      setInterval(() => {
+        const v = soundMeter.instant;
+        prev = prev || v;
+        // document.getElementById("dev").innerHTML = v;
+        if (v > prev) {
+          const vec = Math.sqrt(v - prev) * 6;
+          if (vec > 0.3) {
+            tap(1, vec, getCameraRad());
+          }
+        }
+        prev = v;
+      }, 150);
+    });
+  });
+
+  // sendData
+  var data = null;
+  function sendData() {
+    function getData() {
+      const data = [];
+  
+      objs.forEach(function(o) {
+        const body = o.el.body;
+        if (body == null) {
+          return;
+        }
+        const p = body.position;
+        const q = body.quaternion;
+        const v = body.velocity;
+        data.push({
+          p: [p.x, p.y, p.z],
+          q: [q.x, q.y, q.z, q.w],
+          v: [v.x, v.y, v.z],
+        });
+      });
+  
+      return data;
+    }
+    data = getData();
+  }
+  if (player == 1) {
+    setInterval(sendData, 100);
+  }
+
+  // recvData
+  if (player != 1) {
+    onRenderFcts.push(function() {
+      var dat = data;
+      if (dat == null || data.length != 2) {
+        return;
+      }
+      data = null;
+
+      objs.forEach(function(o) {
+        const body = o.el.body;
+        if (body == null) {
+          return;
+        }
+        const d = dat.shift();
+        body.sleep();
+        body.position = new CANNON.Vec3(d.p[0], d.p[1], d.p[2]);
+        body.quaternion.set(d.q[0], d.q[1], d.q[2], d.q[3]);
+        body.velocity = new CANNON.Vec3(d.v[0], d.v[1], d.v[2]);
+        body.wakeUp();
+      });
+    });
+  }
+
+  const peer = (window.peer = new Peer({
+    key: "d097f0a2-c112-428a-9d69-a86edf2b03cf",
+    debug: 3,
+  }));
+
+  peer.on('open', function(){
+    const dataConnection = peer.joinRoom("tonton");
+    
+    dataConnection.once('open', async () => {
+      console.log("open");
+    });
+    
+    dataConnection.on('data', d => {
+      data = d.data;
+    });
+    
+    if (player == 1) {
+      onRenderFcts.push(function() {
+        const dat = data;
+        if (dat != null) {
+          data = null;
+          dataConnection.send(dat);
+        }
+      });
+    }
+
+    peer.on('error', console.error);
+  });
+  
+  
+</script>
+
 </body>
 </html>

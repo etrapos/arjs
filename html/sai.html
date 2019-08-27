@@ -1,0 +1,35 @@
+<!doctype HTML>
+<html style="touch-action: manipulation;">
+  <head>
+      <meta charset="utf-8"/>
+      <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+<!-- A-Frame ライブラリの読み込み -->
+<script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+<!-- AR.js ライブラリの読み込み -->
+<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.min.js"></script>
+
+<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v5.1.0/dist/aframe-extras.min.js"></script>
+
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
+    <!--<script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/kripken/ammo.js/dcab07bf0e7f2b4b64c01dc45da846344c8f50be/builds/ammo.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/takahirox/aframe-outline/v1.1.1/build/aframe-outline.min.js"></script>-->
+    <!--<script src="https://cdn.rawgit.com/takahirox/a-mmd/v1.0.3/build/a-mmd.min.js"></script>-->
+
+  </head>
+<body style='margin:0px; overflow:hidden;'>
+<a-scene physics="debug: false">
+        <!-- 物理演算用サイコロオブジェクト -->
+    <a-entity 
+        dynamic-body="mass:100;linearDamping: 0.01;angularDamping: 0.0001;"  
+        geometry="primitive: box" 
+        position="0 10 -10" 
+    ></a-entity>
+    
+    <!-- 床 -->
+    <a-entity static-body geometry="primitive: box; width: 300; depth: 300; height: 1" position="0 0 0" material="src:floor.jpg; repeat: 20 20;"></a-entity>
+<a-scene>
+
+</body>
+</html>
