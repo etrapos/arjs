@@ -1,133 +1,126 @@
 <!doctype HTML>
 <html>
   <head>
-      <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-<!-- A-Frame ライブラリの読み込み -->
-<script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
-<!-- AR.js ライブラリの読み込み -->
-<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.min.js"></script>
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script> 
 
-<!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v5.1.0/dist/aframe-extras.min.js"></script>-->
-<script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
-<script src="https://webrtc.github.io/samples/src/content/getusermedia/volume/js/soundmeter.js"></script>
+    <script src="https://webrtc.github.io/samples/src/content/getusermedia/volume/js/soundmeter.js"></script>
+    <script type="text/javascript" src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+</head>
+<body style='margin:0px; overflow:hidden; touch-action: manipulation;'>
+<a-scene
+  embedded
+  arjs="debugUIEnabled:false;sourceType:webcam;"
+  vr-mode-ui="enabled: true"
+  physics="debug: false; gravity: -5"
+  class=""
+  canvas=""
+  inspector=""
+  keyboard-shortcuts=""
+  light="defaultLightsEnabled: false"
+  screenshot="">
+  
+  <a-light
+    id="light"
+    type="ambient"
+    color="#AAA">
+  </a-light>
 
-<script type="text/javascript" src="https://cdn.webrtc.ecl.ntt.com/skyway-latest.js"></script>
+  <a-assets>
+      <a-asset-item id="sample1-obj" src="model_obj/sample1/sample.obj"></a-asset-item>
+      <a-asset-item id="sample1-mtl" src="model_obj/sample1/sample.mtl"></a-asset-item>
+      <a-asset-item id="sample2-obj" src="model_obj/sample2/sample.obj"></a-asset-item>
+      <a-asset-item id="sample2-mtl" src="model_obj/sample2/sample.mtl"></a-asset-item>
+      <img id="grass" src="img/grass.jpg">
+      <img id="sand" src="img/dark_sand.jpg">
+  </a-assets>
 
-    <!--<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>-->
-    
-    <!--<script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>-->
-    <!--<script src="https://cdn.rawgit.com/kripken/ammo.js/dcab07bf0e7f2b4b64c01dc45da846344c8f50be/builds/ammo.js"></script>-->
-    <!--<script src="https://cdn.rawgit.com/takahirox/aframe-outline/v1.1.1/build/aframe-outline.min.js"></script>-->
-    <!--<script src="https://cdn.rawgit.com/takahirox/a-mmd/v1.0.3/build/a-mmd.min.js"></script>-->
-    <style type="text/css">
-      html {
-        touch-action: manipulation;
-      }
-    </style>
-  </head>
-<body style='margin:0px; overflow:hidden;'>
-<!-- こっからA-Frame -->
-<!--<a-scene embedded arjs="debugUIEnabled:false;trackingMethod:best;sourceType: webcam;" vr-mode-ui="enabled: false" physics="debug: true;">-->
-<a-scene embedded arjs="debugUIEnabled:false;sourceType:webcam;" vr-mode-ui="enabled: false" physics="debug: true;gravity: -4.9;" class="" canvas="" inspector="" keyboard-shortcuts="" screenshot="" vr-mode-ui="">
+  <a-entity id="vr">
+    <a-marker-camera id="camera" preset="hiro" data-aframe-default-camera></a-marker-camera>
+  </a-entity>
 
-    <!-- オブジェクトファイルとマテリアルファイルを読み込む -->
-    <a-assets>
-        <a-asset-item id="sample1-obj" src="model_obj/sample1/sample.obj"></a-asset-item>
-        <a-asset-item id="sample1-mtl" src="model_obj/sample1/sample.mtl"></a-asset-item>
-        <a-asset-item id="sample2-obj" src="model_obj/sample2/sample.obj"></a-asset-item>
-        <a-asset-item id="sample2-mtl" src="model_obj/sample2/sample.mtl"></a-asset-item>
-    </a-assets>
-　　　　<!-- こっからARの世界。マーカー上になにを展開するかを書く -->
-　　　　<a-marker-camera preset="hiro"></a-marker-camera>
-        <!--<a-obj-model id="sample" src="#sample-obj" mtl="#sample-mtl" position="0 0 0" scale="0.5 0.5 0.5" rotation="0 0 0"></a-obj-model>-->
-        <!--<a-text value="Merry X'mas !！！" position="0 1.3 0" align="center"></a-text>-->
-        
-         <!--dynamic-body="shape: box; mass: 10"-->
-        <!--<a-obj-model dynamic-body="mass:5;" id="player1" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.6 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
-        <!--<a-obj-model dynamic-body="shape: box; mass:5;linearDamping: 0.01;angularDamping: 0.0001;" id="player1" src="#sample1-obj" mtl="#sample1-mtl" geometry="primitive: box" position="0 0.6 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
+  <a-entity
+    id="player1"
+    dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+    shape__main="shape: cylinder;
+      height: 2;
+      radiusTop: 0.5;
+      radiusBottom: 0.35;"
+    geometry="height: 2;" position="0 0.4 0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 180 0">
+    <a-entity
+      class="label"
+      position="0 1.75 0"
+      scale="2.5 2.5 2.5"
+      visible="false">
+      <a-text value="You" align="center" font="exo2bold" color="#FAA"></a-text>
+      <a-text value="You" align="center" font="exo2bold" color="#FAA" rotation="0 180 0"></a-text>
+    </a-entity>
+    <a-entity 
+      obj-model="obj: #sample1-obj; mtl: #sample1-mtl"
+      position="0 -1 0"
+      ></a-entity>
+  </a-entity>
 
-        
-        <a-entity 
-           dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
-           shape__main="shape: cylinder;
-             height: 2;
-             radiusTop: 0.5;
-             radiusBottom: 0.4;"
-           id="player1" geometry="height: 2;" position="0 0.4 0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 180 0">
-          <a-entity 
-            obj-model="obj: #sample1-obj; mtl: #sample1-mtl"
-            position="0 -1 0"
-            ></a-entity>
-        </a-entity>
-
-        <a-entity 
-           dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
-           shape__main="shape: cylinder;
-             height: 2;
-             radiusTop: 0.5;
-             radiusBottom: 0.4;"
-           id="player2" geometry="height: 2;" position="0 0.4 -0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 0 0">
-          <a-entity 
-            obj-model="obj: #sample2-obj; mtl: #sample2-mtl"
-            position="0 -1 0"
-            ></a-entity>
-        </a-entity>
-        
-        <!--<a-entity id="player1" color="#333" dynamic-body="mass:100;linearDamping: 0.01;angularDamping: 0.0001;" geometry="primitive: box" position="0 1 0" material="opacity:1;" scale="0.1 0.1 0.1"></a-entity>-->
-
-        <!--<a-obj-model id="player1" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.2 0.25" scale="0.2 0.125 0.2" rotation="0 180 0"></a-obj-model>-->
-        
-        <!--<a-obj-model id="player2" src="#sample1-obj" mtl="#sample1-mtl" position="0 0.15 -0.25" scale="0.2 0.125 0.2" rotation="0 0 0"></a-obj-model>-->
-        <!--<a-text value="Merry X'mas !！！" position="0 0.5 0" scale="0.3 0.3 0.3" align="center"></a-text>-->
-        <!--<a-cylinder position="0 0.15 0" radius="0.5" height="0.0001" color="#A96E2D"></a-cylinder>-->
-        <!--<a-circle-->
-        <!--  static-body-->
-        <!--  rotation="-90 0 0"-->
-        <!--  position="0 0.15 0"-->
-        <!--  radius="1"-->
-        <!-- </a-circle>-->
-        
-          <a-cylinder
-          static-body
-          color="#A96E2D"
+  <a-entity 
+    id="player2"
+    dynamic-body="shape: none; cylinderAxis: y; mass: 5; linearDamping: 0;angularDamping: 0;"
+    shape__main="shape: cylinder;
+      height: 2;
+      radiusTop: 0.5;
+      radiusBottom: 0.35;"
+    geometry="height: 2;" position="0 0.4 -0.25" scale="0.35 0.25 0.35" material="opacity: 0" rotation="0 0 0">
+    <a-entity
+      class="label"
+      position="0 1.75 0"
+      scale="2.5 2.5 2.5"
+      visible="false">
+      <a-text value="You"align="center" font="exo2bold" color="#AAF"></a-text>
+      <a-text value="You"align="center" font="exo2bold" color="#AAF" rotation="0 180 0"></a-text>
+    </a-entity>
+    <a-entity
+      obj-model="obj: #sample2-obj; mtl: #sample2-mtl"
+      position="0 -1 0"
+      ></a-entity>
+  </a-entity>
+  
+  <a-cylinder
+    static-body
+    src="#sand"
     radius="1" height="0.05"
     position="0 0.1 0"
     rotation="0 0 0"
+    roughness="1"
   ></a-cylinder>
-        
-        <a-plane static-body rotation="-90 0 0" position="0 0 0" color="#164816" height="6" width="6"></a-plane>
-<!--<a-box  position="0 0.5 -5" width="3" height="1" depth="1"></a-box>-->
+
+  <a-plane static-body roughness="1" src="#grass" rotation="-90 0 0" position="0 0 0" height="6" width="6"></a-plane>
+  <a-text id="text" value="Ready" position="0 1.5 0" scale="2 2 2" align="center" font="exo2bold"></a-text>
+
+  <a-entity id="particle1" position="0 6 0" visible="false" particle-system="preset:star; color: #ffff7f,#ff1493; velocityValue: 0 3 0; accelerationValue: 0 -3 0; enabled: true;"></a-entity>
+  <a-entity id="particle2" position="0 6 0" visible="false" particle-system="preset:star; color: #7fffff,#9314ff; velocityValue: 0 3 0; accelerationValue: 0 -3 0; enabled: true;"></a-entity>
+
 </a-scene>
-<!-- ここまででA-Frameおわり -->
-<button id="dev" type="button" style="position: absolute; right: 200px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">dev</button>
-<button id="tap" type="button" style="position: absolute; right: 130px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">tap</button>
-<button id="reset" type="button" style="position: absolute; right: 50px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">reset</button>
+
+<button id="tap" type="button" style="position: absolute; right: 160px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">tap</button>
+<button id="reset" type="button" style="position: absolute; left: 10px; bottom: 15px; z-index: 9999; background-color: white; padding: 15px;">start</button>
 
 <script>
-  const THREE = window.THREE;
   const CANNON = window.CANNON;
   const sceneEl = document.querySelector('a-scene');
-  const camera = sceneEl.querySelector('a-marker-camera');
-
-  const obj1 = document.getElementById("player1")
-  obj1.setAttribute("defaultPosition", [0, 0.4, 0.25]);
-  const obj2 = document.getElementById("player2")
-  obj2.setAttribute("defaultPosition", [0, 0.4, -0.25]);
-  
-  function getParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, '\\$&');
-    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, ' '));
-  }
-  
+  const light = document.getElementById("light");
+  const camera = document.getElementById("camera");
+  const vr = document.getElementById("vr");
+  const text = document.getElementById("text");
+  const particle1 = document.getElementById("particle1");
+  const particle2 = document.getElementById("particle2");
   const player = getParameterByName("p");
-
+  
+  const obj1 = document.getElementById("player1");
+  const obj2 = document.getElementById("player2");
   const objs = [
     {
       el: obj1
@@ -140,6 +133,91 @@
       , initAngle: new CANNON.Vec3(0, 0, 0)
     }
   ];
+
+  function toggleLabel(visible) {
+    if (player == 1) {
+      obj1.querySelector(".label").setAttribute("visible", visible);
+    } else if (player == 2) {
+      obj2.querySelector(".label").setAttribute("visible", visible);
+    }
+  }
+  toggleLabel(true);
+
+  var state = "pause";
+
+  // run the rendering loop
+  const onRenderFcts = [];
+	requestAnimationFrame(function animate(nowMsec) {
+		// keep looping
+		requestAnimationFrame(animate);
+		
+		onRenderFcts.forEach(function(onRenderFct){
+			onRenderFct(nowMsec)
+		});
+	});
+	
+	// VR mode camera fix
+	onRenderFcts.push(function() {
+	  if (sceneEl.is('vr-mode') == false) {
+	    return;
+	  }
+	  const rdd = getCameraRad();
+
+    const dis = 2;
+	  const p = vr.object3D.position;
+	  p.setX(Math.sin(rdd) * dis);
+	  p.setZ(Math.cos(rdd) * dis);
+	});
+	// text fix
+	onRenderFcts.push(function() {
+	  text.object3D.rotation.y = getCameraRad();
+	});
+	
+	if (!player) {
+    document.getElementById("tap").style.display="none";
+    document.getElementById("reset").style.display="none";
+    sceneEl.querySelector(".a-enter-vr").style.display="none";
+	} else {
+	  if (player != 1) {
+      document.getElementById("reset").style.display="none";
+	  }
+	}
+
+  sceneEl.addEventListener("enter-vr", function() {
+    document.getElementById("tap").style.display="none";
+    document.getElementById("reset").style.display="none";
+  });
+  sceneEl.addEventListener("exit-vr", function() {
+    if (player) {
+      document.getElementById("tap").style.display="inline-block";
+      if (player == 1) {
+        document.getElementById("reset").style.display="inline-block";
+      }
+    }
+    vr.object3D.position.set(0, 0, 0);
+  });
+
+  function setText(value, color) {
+    text.setAttribute("value", value);
+    if (color) {
+      text.setAttribute("color", color);
+    }
+  }
+  function updateParticle() {
+    const v = text.getAttribute("value");
+    particle1.setAttribute("visible", (v.indexOf("1P") === 0));
+    particle2.setAttribute("visible", (v.indexOf("2P") === 0));
+  }
+
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  }
   
   function reset() {
     objs.forEach(function (o) {
@@ -153,35 +231,100 @@
       // sendData
       sendData();
     });
+    setTimeout(function() {
+      setText("Ready", "#EEE");
+      updateParticle();
+    }, 30);
   }
   
   function getCameraRad() {
-    var marker = camera.object3D.children[0];
-    return marker.rotation.z;
+	  if (sceneEl.is('vr-mode') == false) {
+      const marker = camera.object3D.children[0];
+      if (marker) {
+        return marker.rotation.z;
+      } else {
+        return 0;
+      }
+	  } else {
+  	  const r = camera.object3D.rotation;
+  	  const r0 = r.y
+  	    + Math.abs(Math.sin(r.x) * Math.cos(r.y) * Math.sin(r.z))
+  	    * (r.y < 0 ? -1 : 1);
+  	  const r1 = (Math.abs(r.z) < Math.PI / 2 ? r0 : (Math.PI * (r0 < 0 ? -1 : 1) - r0))
+  	  return r1;
+	  }
   }
   
   document.getElementById("reset").onclick = function() {
     if (player == 1) {
-      reset()
+      if (state == "start") {
+        // reset
+        reset();
+        state = "pause";
+        document.getElementById("reset").innerHTML = "start";
+        light.setAttribute("color", "#AAA");
+        toggleLabel(true);
+      } else if (state == "pause") {
+        // start
+        state = "ready";
+        document.getElementById("reset").innerHTML = "ready";
+        light.setAttribute("color", "#FFF");
+        toggleLabel(false);
+        var count = 3;
+        var countDown = function() {
+          if (count > 0) {
+            setText(count, "#EEE");
+            count--;
+            setTimeout(countDown, 1000);
+          } else {
+            setText("Fight !", "#FFF");
+            setTimeout(function() {
+              if (state == "start") {
+                setText("");
+              }
+            }, 1200);
+            state = "start";
+            document.getElementById("reset").innerHTML = "reset";
+          }
+        }
+        countDown();
+      }
     }
   }
 
   function move(target, v, rad) {
-    var vec = Math.min(0.75, v);
-    var x = vec * Math.sin(rad);
-    var z = vec * Math.cos(rad);
+    if (state != "start") {
+      return;
+    }
+    const vec = Math.min(0.55, v);
+    const x = vec * Math.sin(rad) * -1;
+    const z = vec * Math.cos(rad) * -1;
+    const y = vec;
+    const rate = 2/3;
+    
+    function addVelocity(o, x, y, z) {
+      if (o.position.y >= 0.425) {
+        return;
+      }
+      const v = o.velocity;
+      const vx = v.x + x;
+      // const vy = Math.min(v.y + y, 0.1);
+      const vy = v.y + y;
+      const vz = v.z + z;
+      const max = 1;
+      const len = Math.max(Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)), 1) / max;
+      
+      v.x = vx / len;
+      v.y = vy / len;
+      v.z = vz / len;
+    }
 
-    var rate = 2 / 3;
     if (target == 1) {
-      obj1.body.velocity.x -= x;
-      obj1.body.velocity.z -= z;
-      obj2.body.velocity.x -= x * rate;
-      obj2.body.velocity.z -= z * rate;
+      addVelocity(obj1.body, x, y, z);
+      addVelocity(obj2.body, x * rate, y * rate, z * rate);
     } else if (target == 2) {
-      obj2.body.velocity.x -= x;
-      obj2.body.velocity.z -= z;
-      obj1.body.velocity.x -= x * rate;
-      obj1.body.velocity.z -= z * rate;
+      addVelocity(obj2.body, x, y, z);
+      addVelocity(obj1.body, x * rate, y * rate, z * rate);
     }
     
     // sendData
@@ -238,42 +381,33 @@
   //   })());
   // }
 
-  // run the rendering loop
-  const onRenderFcts = [];
-	requestAnimationFrame(function animate(nowMsec) {
-		// keep looping
-		requestAnimationFrame(animate);
-		
-		onRenderFcts.forEach(function(onRenderFct){
-			onRenderFct(nowMsec)
-		});
-	});
-	
 	// mic
-  navigator.mediaDevices.getUserMedia({ audio: true, video: false })
-  .then(function(stream){
-    
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const soundMeter = window.soundMeter = new SoundMeter(audioContext);
-    soundMeter.connectToSource(stream, function(e) {
-      if (e) {
-        alert(e);
-        return;
-      }
-      var prev = null;
-      setInterval(() => {
-        const v = soundMeter.instant;
-        prev = prev || v;
-        if (v > prev) {
-          const vec = Math.sqrt(v - prev) * 3;
-          if (vec > 0.3) {
-            tap(1, vec, getCameraRad());
-          }
+	if (player) {
+  	    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+    .then(function(stream){
+      
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const soundMeter = window.soundMeter = new SoundMeter(audioContext);
+      soundMeter.connectToSource(stream, function(e) {
+        if (e) {
+          console.log(e);
+          return;
         }
-        prev = v;
-      }, 50);
+        var prev = null;
+        setInterval(() => {
+          const v = soundMeter.instant;
+          prev = prev || v;
+          if (v > prev && sceneEl.is('vr-mode')) {
+            const vec = Math.sqrt(v - prev) * 1.75;
+            if (vec > 0.25) {
+              tap(player, vec, getCameraRad());
+            }
+          }
+          prev = v;
+        }, 50);
+      });
     });
-  });
+	}
 
   // syncData
   var tapData = null;
@@ -318,7 +452,7 @@
   }
 
   document.getElementById("tap").onclick = function() {
-    tap(1, 0.5 + Math.random() * 0.2, getCameraRad());
+    tap(player, 0.45 + Math.random() * 0.1, getCameraRad());
     // alert(getCameraRad());
 
     // var marker = camera.object3D.children[0];
@@ -351,7 +485,7 @@
   }));
 
   peer.on('open', function(){
-    const dataConnection = peer.joinRoom("tonton");
+    const dataConnection = peer.joinRoom("tonton-sfu", {mode: 'sfu'});
     
     dataConnection.once('open', async () => {
       console.log("open");
@@ -363,6 +497,11 @@
         syncData = data.body;
       } else if (data.type == "tap") {
         tapData = data.body;
+      } else if (data.type == "text") {
+        setText(data.body[0], data.body[1]);
+        light.setAttribute("color", data.body[2]);
+        toggleLabel(data.body[2] != "#FFF");
+        updateParticle();
       }
     });
     
@@ -385,6 +524,47 @@
           move(2, data.v, data.r);
         }
       });
+    	onRenderFcts.push(function() {
+    	  if (text.getAttribute("value") != "") {
+    	    return;
+    	  }
+    	  
+    	  function check(o) {
+    	    if (!o.body) {
+    	      return false;
+    	    }
+    	    return Math.sqrt(Math.pow(o.body.position.x, 2) + Math.pow(o.body.position.z, 2)) >= 1.1
+    	      || Math.abs(o.object3D.rotation.z) > Math.PI / 2
+    	  }
+    	  
+    	  var t, c;
+    	  if (check(obj1)) {
+    	    t = "2P WIN";
+    	    c = "#DDF";
+    	  } else if (check(obj2)) {
+    	    t = "1P WIN";
+    	    c = "#FDD";
+        } else {
+          return;
+        }
+  	    setText(t, c);
+  	    updateParticle();
+    	});
+    	onRenderFcts.push((function() {
+    	  var prev = "";
+    	  return function() {
+    	    var t = text.getAttribute("value");
+    	    if (prev != t) {
+    	      var c = text.getAttribute("color");
+    	      var l = light.getAttribute("color");
+            dataConnection.send({
+                type: "text"
+              , body: [t, c, l]
+            });
+    	    }
+    	    prev = t;
+    	  }
+    	})());
     } else {
       // other
       if (player == 2) {
